@@ -9,6 +9,7 @@ public class main {
         nodo inicio = cuadricula.getaNodos()[0][0];
         nodo objetivo = cuadricula.getaNodos()[9][9];
 
+        
         aStar aEstrella = new aStar(cuadricula, inicio, objetivo);
         List<nodo> ruta = aEstrella.encontrarRuta();
 

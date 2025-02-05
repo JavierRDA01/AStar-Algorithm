@@ -32,6 +32,7 @@ public class cuadricula {
 	                adyacentes.add(getaNodos()[x][y]);
 	            }
 	        }
+	        
 	    }
 	    return adyacentes;
 	}

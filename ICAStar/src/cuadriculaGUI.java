@@ -74,6 +74,7 @@ public class cuadriculaGUI extends JPanel {
                 return null;
             }
 
+            
             @Override
             protected void process(List<nodo> chunks) {
                 panel.setActual(chunks.get(chunks.size() - 1));

@@ -18,7 +18,6 @@ public class aStar {
     public List<nodo> encontrarRuta() {
         PriorityQueue<nodo> abiertos = new PriorityQueue<>(Comparator.comparingDouble(n -> n.f));
         Set<nodo> cerrados = new HashSet<>();
-
         inicio.g = 0;
         inicio.h = calcularHeuristica(inicio);
         inicio.f = inicio.g + inicio.h;
