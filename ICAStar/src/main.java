@@ -1,24 +1,36 @@
-import java.util.List;
+import javax.swing.*;
 
 public class main {
     public static void main(String[] args) {
-        cuadricula cuadricula = new cuadricula(10, 10);
-        cuadricula.Inaccesible(2, 2);
-        cuadricula.Inaccesible(3, 3);
+        // Pedir tamaño de la cuadrícula
+    	int filas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de filas de la cuadrícula:").trim());
+    	int columnas = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el número de columnas de la cuadrícula:").trim());
 
-        nodo inicio = cuadricula.getaNodos()[0][0];
-        nodo objetivo = cuadricula.getaNodos()[9][9];
+        cuadricula cuadricula = new cuadricula(filas, columnas);
+        cuadriculaGUI panel = new cuadriculaGUI(cuadricula);
 
-        
-        aStar aEstrella = new aStar(cuadricula, inicio, objetivo);
-        List<nodo> ruta = aEstrella.encontrarRuta();
+        // Crear ventana
+        JFrame frame = new JFrame("Visualización A* - Selecciona nodos");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
-        if (ruta.isEmpty()) {
-            System.out.println("No se encontró ruta.");
-        } else {
-            for (nodo nodo : ruta) {
-                System.out.println("(" + nodo.x + ", " + nodo.y + ")");
-            }
-        }
+        // Botón para ejecutar A*
+        JButton ejecutarBoton = new JButton("Ejecutar A*");
+        ejecutarBoton.addActionListener(e -> panel.ejecutarAStar());
+
+        // Panel de controles y leyenda
+        JPanel controlPanel = new JPanel();
+        controlPanel.add(ejecutarBoton);
+        controlPanel.add(new JLabel("<html>"
+                + "<b>Controles:</b><br>"
+                + "🖱️ Click izquierdo: Marcar obstáculos (Negro)<br>"
+                + "🖱️ Click derecho: Inicio (Azul) → Destino (Rojo)<br>"
+                + "🟢 Verde: Ruta óptima<br>"
+                + "</html>"));
+
+        frame.add(panel);
+        frame.add(controlPanel);
+        frame.pack();
+        frame.setVisible(true);
     }
 }

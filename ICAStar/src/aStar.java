@@ -26,6 +26,7 @@ public class aStar {
         while (!abiertos.isEmpty()) {
             nodo actual = abiertos.poll();
 
+            
             if (actual == objetivo) {
                 return reconstruirRuta(actual);
             }

@@ -8,6 +8,7 @@ public class nodo {
 public nodo(int x,int y, boolean accesible) {
 	this.x=x;
 	this.y=y;
+	
 	this.accesible=accesible;
 	this.g= Double.POSITIVE_INFINITY;
 	this.h= 0;
