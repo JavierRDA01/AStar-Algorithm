@@ -13,7 +13,7 @@ public class aStar {
 
     /**
      * Método para reiniciar los valores (g, h, f y padre) de todos los nodos de la cuadricula.
-     * Así se evita que queden restos de una búsqueda A* anterior.
+     * Así se evita que queden restos de una búsqueda A* anterior.a
      */
     private void reiniciarNodos() {
         nodo[][] nodos = cuadricula.getaNodos();

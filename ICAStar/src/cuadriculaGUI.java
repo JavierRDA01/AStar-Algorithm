@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
+//a
 public class cuadriculaGUI extends JPanel {
     private cuadricula cuadricula;
     private List<nodo> ruta;          // Almacena la ruta calculada (final)

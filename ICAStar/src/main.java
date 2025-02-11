@@ -2,7 +2,7 @@ import javax.swing.*;
 
 public class main {
     public static void main(String[] args) {
-        // Pedir tamaño de la cuadrícula
+        // Pedir tamaño de la cuadrículaa
         int filas = Integer.parseInt(
             JOptionPane.showInputDialog("Ingrese el número de filas de la cuadrícula:").trim()
         );

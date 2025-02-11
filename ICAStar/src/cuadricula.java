@@ -39,7 +39,7 @@ public class cuadricula {
         }
         return adyacentes;
     }
-
+//a
     public nodo[][] getaNodos() {
         return aNodos;
     }

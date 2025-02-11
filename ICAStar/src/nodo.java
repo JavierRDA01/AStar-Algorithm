@@ -4,7 +4,7 @@ public class nodo {
 	double g,h,f;
 	boolean accesible;
 	nodo padre;
- 
+ //a
 public nodo(int x,int y, boolean accesible) {
 	this.x=x;
 	this.y=y;
