@@ -2,7 +2,7 @@ import javax.swing.*;
 
 public class main {
     public static void main(String[] args) {
-        // Pedir tamaño de la cuadrículaa
+        // Pedir tamaño de la cuadrícula
         int filas = Integer.parseInt(
             JOptionPane.showInputDialog("Ingrese el número de filas de la cuadrícula:").trim()
         );
@@ -14,11 +14,11 @@ public class main {
         cuadriculaGUI panel = new cuadriculaGUI(cuadricula);
 
         // Crear ventana
-        JFrame frame = new JFrame("Visualización A* - Selecciona nodos");
+        JFrame frame = new JFrame("Visualización A* - Celdas penalizadas");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
-        // Botón para ejecutar A* directo (sin waypoints)
+        // Botón para ejecutar A* directo
         JButton ejecutarBoton = new JButton("Ejecutar A* (Directo)");
         ejecutarBoton.addActionListener(e -> panel.ejecutarAStar());
 
@@ -31,19 +31,16 @@ public class main {
         agregarWaypointBtn.addActionListener(e -> {
             try {
                 String sx = JOptionPane.showInputDialog(frame, "Coordenada X del waypoint:");
-                if (sx == null) return; // Usuario canceló
+                if (sx == null) return;
                 String sy = JOptionPane.showInputDialog(frame, "Coordenada Y del waypoint:");
-                if (sy == null) return; // Usuario canceló
+                if (sy == null) return;
 
                 int x = Integer.parseInt(sx.trim());
                 int y = Integer.parseInt(sy.trim());
-
-                // Llamamos al método de cuadriculaGUI para añadir el waypoint
                 panel.agregarWaypoint(x, y);
-
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, 
-                    "Coordenadas inválidas. Debe ingresar números enteros.", 
+                JOptionPane.showMessageDialog(frame,
+                    "Coordenadas inválidas. Debe ingresar números enteros.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -55,17 +52,13 @@ public class main {
         controlPanel.add(agregarWaypointBtn);
 
         controlPanel.add(new JLabel("<html>"
-                + "<b>Controles con ratón:</b><br>"
-                + "• Click izquierdo: Marcar obstáculos (Negro)<br>"
-                + "• Click derecho: Seleccionar Inicio (Azul), luego Destino (Rojo)<br><br>"
-                + "<b>Botones:</b><br>"
-                + "• \"Añadir Waypoint\": Ingresa coordenadas X, Y<br>"
-                + "• \"Ejecutar A* (Directo)\": Ir del inicio al fin (sin waypoints)<br>"
-                + "• \"Ejecutar A* (Waypoints)\": Ir secuencialmente por los waypoints hasta el destino<br>"
+                + "<b>Controles de la cuadrícula:</b><br>"
+                + "• Click izquierdo: Obstáculo ON/OFF (Negro)<br>"
+                + "• Shift + click izquierdo: Penalizado ON/OFF (Rosa)<br>"
+                + "• Click derecho: Inicio (Azul) y luego Objetivo (Rojo)<br>"
                 + "<br>"
-                + "Blanco = Zona accesible<br>"
-                + "Verde = Ruta recorrida en la animación<br>"
-                + "Naranja = Waypoints<br>"
+                + "Waypoints (Naranja) se añaden con el botón \"Añadir Waypoint\"<br>"
+                + "Celdas penalizadas tienen coste adicional = 0.07 * sqrt(filas²+columnas²)<br>"
                 + "</html>"));
 
         frame.add(panel);

@@ -10,8 +10,8 @@ public class cuadricula {
         this.columna = columna;
         this.setaNodos(new nodo[fila][columna]);
         
-        for(int i=0; i<fila; i++){
-            for (int j=0; j<columna; j++){
+        for(int i = 0; i < fila; i++){
+            for (int j = 0; j < columna; j++){
                 getaNodos()[i][j] = new nodo(i, j, true);
             }
         }
@@ -28,18 +28,18 @@ public class cuadricula {
         for (int i = -1; i <= 1; i++){
             for (int j = -1; j <= 1; j++){
                 if (i == 0 && j == 0) continue; // Saltar el nodo actual
-                
                 int x = nodo.x + i;
                 int y = nodo.y + j;
                 
-                if (x >= 0 && x < fila && y >= 0 && y < columna && getaNodos()[x][y].accesible) {
+                if (x >= 0 && x < fila && y >= 0 && y < columna 
+                    && getaNodos()[x][y].accesible) {
                     adyacentes.add(getaNodos()[x][y]);
                 }
             }
         }
         return adyacentes;
     }
-//a
+
     public nodo[][] getaNodos() {
         return aNodos;
     }

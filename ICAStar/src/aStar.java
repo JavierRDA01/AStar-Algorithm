@@ -5,15 +5,22 @@ public class aStar {
     private nodo inicio;
     private nodo objetivo;
 
+    // Penalización global = 0.07 * sqrt(filas^2 + columnas^2)
+    private double penaltyValue;
+
     public aStar(cuadricula cuadricula, nodo inicio, nodo objetivo) {
         this.cuadricula = cuadricula;
         this.inicio = inicio;
         this.objetivo = objetivo;
+
+        // Calcular penalización en base al tamaño de la cuadrícula
+        int filas = cuadricula.getaNodos().length;
+        int columnas = cuadricula.getaNodos()[0].length;
+        this.penaltyValue = 0.07 * Math.sqrt(filas * filas + columnas * columnas);
     }
 
     /**
-     * Método para reiniciar los valores (g, h, f y padre) de todos los nodos de la cuadricula.
-     * Así se evita que queden restos de una búsqueda A* anterior.a
+     * Reinicia g, h, f y padre de todos los nodos, para no arrastrar búsquedas previas.
      */
     private void reiniciarNodos() {
         nodo[][] nodos = cuadricula.getaNodos();
@@ -31,51 +38,54 @@ public class aStar {
     /**
      * Heurística: distancia euclidiana hasta el objetivo.
      */
-    private double calcularHeuristica(nodo nodo) {
-        return Math.sqrt(Math.pow(nodo.x - objetivo.x, 2) + Math.pow(nodo.y - objetivo.y, 2));
+    private double calcularHeuristica(nodo n) {
+        return Math.sqrt(Math.pow(n.x - objetivo.x, 2) + Math.pow(n.y - objetivo.y, 2));
     }
 
     /**
-     * Ejecuta A* para hallar la ruta entre 'inicio' y 'objetivo'.
-     * Devuelve la lista de nodos en la ruta o lista vacía si no hay camino.
+     * Encuentra la ruta A* desde 'inicio' hasta 'objetivo'.
      */
     public List<nodo> encontrarRuta() {
-        // Antes de cada nueva búsqueda, reiniciamos todos los nodos
+        // Reiniciar antes de cada búsqueda
         reiniciarNodos();
 
-        // Estructuras para abiertos/cerrados
         PriorityQueue<nodo> abiertos = new PriorityQueue<>(Comparator.comparingDouble(n -> n.f));
         Set<nodo> cerrados = new HashSet<>();
 
-        // Configurar valores iniciales del nodo 'inicio'
+        // Nodo inicio
         inicio.g = 0;
         inicio.h = calcularHeuristica(inicio);
-        inicio.f = inicio.g + inicio.h;
+        double penaltyInicio = inicio.penalizado ? penaltyValue : 0.0;
+        inicio.f = inicio.g + inicio.h + penaltyInicio;
         abiertos.add(inicio);
 
-        // Bucle principal de A*
+        // Bucle principal
         while (!abiertos.isEmpty()) {
             nodo actual = abiertos.poll();
 
-            // Si llegamos al objetivo, reconstruimos y retornamos la ruta
+            // Si llegamos al objetivo
             if (actual == objetivo) {
                 return reconstruirRuta(actual);
             }
 
             cerrados.add(actual);
 
-            // Recorrer vecinos adyacentes
+            // Revisar vecinos
             for (nodo adyacente : cuadricula.obtenerAdyacentes(actual)) {
-                if (cerrados.contains(adyacente)) {
-                    continue;
-                }
-                double gTentativo = actual.g + 1;  // cost = 1 por cada paso
+                if (cerrados.contains(adyacente)) continue;
+
+                // Penalización si el vecino es penalizado
+                double penalty = adyacente.penalizado ? penaltyValue : 0.0;
+                // Costo de paso: 1 + penalty
+                double gTentativo = actual.g + 1 + penalty;
 
                 if (gTentativo < adyacente.g) {
                     adyacente.padre = actual;
                     adyacente.g = gTentativo;
                     adyacente.h = calcularHeuristica(adyacente);
-                    adyacente.f = adyacente.g + adyacente.h;
+                    // f = g + h + penalty (si penalizado)
+                    adyacente.f = adyacente.g + adyacente.h
+                                  + (adyacente.penalizado ? penaltyValue : 0.0);
 
                     if (!abiertos.contains(adyacente)) {
                         abiertos.add(adyacente);
@@ -84,19 +94,19 @@ public class aStar {
             }
         }
 
-        // Si se vacía 'abiertos' sin encontrar objetivo, no hay ruta
+        // No se encontró ruta
         return Collections.emptyList();
     }
 
     /**
-     * Reconstruye la ruta desde un nodo final (objetivo) siguiendo 'padre' hacia atrás.
+     * Reconstruir la ruta desde el objetivo hasta el inicio.
      */
     private List<nodo> reconstruirRuta(nodo nodoFinal) {
         List<nodo> ruta = new ArrayList<>();
-        nodo current = nodoFinal;
-        while (current != null) {
-            ruta.add(current);
-            current = current.padre;
+        nodo actual = nodoFinal;
+        while (actual != null) {
+            ruta.add(actual);
+            actual = actual.padre;
         }
         Collections.reverse(ruta);
         return ruta;
