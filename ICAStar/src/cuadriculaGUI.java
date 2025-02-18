@@ -12,10 +12,8 @@ public class cuadriculaGUI extends JPanel {
     private nodo actual;
     private nodo inicio;
     private nodo objetivo;
-
     // Lista de waypoints
     private List<nodo> waypoints = new ArrayList<>();
-
     private final int TAMANO_CELDA = 50;
 
     public cuadriculaGUI(cuadricula cuadricula) {
@@ -314,20 +312,15 @@ public class cuadriculaGUI extends JPanel {
         g2.drawLine(x1, y1, x2, y2);
 
         double phi = Math.toRadians(25);  // ángulo de apertura
-        int barb = 6;                     // longitud de la "cabeza" de la flecha
+        double longitud = 10;             // largo de la punta de la flecha
+        double angulo = Math.atan2(y2 - y1, x2 - x1);
 
-        double dy = y2 - y1;
-        double dx = x2 - x1;
-        double theta = Math.atan2(dy, dx);
+        int x3 = (int) (x2 - longitud * Math.cos(angulo - phi));
+        int y3 = (int) (y2 - longitud * Math.sin(angulo - phi));
 
-        double rho = theta + phi;
-        int xBarb = (int)(x2 - barb * Math.cos(rho));
-        int yBarb = (int)(y2 - barb * Math.sin(rho));
-        g2.drawLine(x2, y2, xBarb, yBarb);
+        int x4 = (int) (x2 - longitud * Math.cos(angulo + phi));
+        int y4 = (int) (y2 - longitud * Math.sin(angulo + phi));
 
-        rho = theta - phi;
-        xBarb = (int)(x2 - barb * Math.cos(rho));
-        yBarb = (int)(y2 - barb * Math.sin(rho));
-        g2.drawLine(x2, y2, xBarb, yBarb);
+        g2.fillPolygon(new int[] {x2, x3, x4}, new int[] {y2, y3, y4}, 3);
     }
 }
